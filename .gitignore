@@ -1,0 +1,10 @@
+*.o
+pso
+
+.clangd/
+.cache/
+
+.direnv/
+
+compile_commands.json
+
