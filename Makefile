@@ -1,9 +1,9 @@
-CC      = gcc
-CFLAGS  = -Wall -Wextra -std=c11 -g
+CC     = gcc
+CFLAGS = -Wall -Wextra -std=c11 -g
 
-TARGET  = pso
-SRC     = main.c
-OBJ     = $(SRC:.c=.o)
+TARGET = pso
+SRC    = main.c pso.c utils.c
+OBJ    = $(SRC:.c=.o)
 
 all: $(TARGET)
 
