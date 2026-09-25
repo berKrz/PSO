@@ -1,12 +1,14 @@
 #include "pso.h"
 #include "utils.h"
+#include "args.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
 
-int main(void) {
+int main(int argc, char **argv) {
     g_cfg = config_default();
+    parse_args(argc, argv);
     srand((unsigned)time(NULL) ^ (unsigned)getpid());
     clear_screen();
 
