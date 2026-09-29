@@ -2,7 +2,7 @@ CC     = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g
 
 TARGET = pso
-SRC    = main.c pso.c utils.c config.c args.c
+SRC    = main.c pso.c utils.c config.c args.c ini.c
 OBJ    = $(SRC:.c=.o)
 
 all: $(TARGET)
