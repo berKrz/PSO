@@ -49,6 +49,10 @@ void parse_ini(const char *filename, Config *dst) {
         char source[128];
         snprintf(source, sizeof(source), "%s:%d", filename, linenum);
 
+        /* accept both 'key-name' and 'key_name' forms */
+        for (char *p = key; *p; p++)
+            if (*p == '-') *p = '_';
+
         apply_field(source, key, value, dst);
     }
 
