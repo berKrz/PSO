@@ -30,14 +30,15 @@ typedef struct {
     PbestInit    pbest_init;
     int          interactive;
 
-    double (*fitness_fn)(double *pos, int n_dims);
+    double (*fitness_fn)(double *pos);
 } Config;
 
 extern Config g_cfg;
 
-Config config_default  (void);
-double fitness_sphere  (double *pos, int n_dims);
-void   init_swarm      (Particle *swarm, GBest *gbest);
-void   update_swarm    (Particle *swarm, GBest *gbest);
-void   free_swarm      (Particle *swarm);
-void   free_gbest      (GBest *gbest);
+Config config_default     (void);
+double fitness_sphere     (double *pos);
+double fitness_rosenbrock (double *pos);
+void   init_swarm         (Particle *swarm, GBest *gbest);
+void   update_swarm       (Particle *swarm, GBest *gbest);
+void   free_swarm         (Particle *swarm);
+void   free_gbest         (GBest *gbest);

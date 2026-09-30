@@ -20,7 +20,7 @@ static void print_help(void) {
         "  -m, --domain-min <f>      Limite inferior do dominio (padrao: -5.0)\n"
         "  -M, --domain-max <f>      Limite superior do dominio (padrao: 5.0)\n"
         "  -d, --direction <s>       Sentido: minimize|maximize (padrao: minimize)\n"
-        "  -f, --fitness <s>         Funcao de aptidao: sphere (padrao: sphere)\n"
+        "  -f, --fitness <s>         Funcao de aptidao: sphere|rosenbrock (padrao: sphere)\n"
         "  -c, --c1 <f>              Coeficiente cognitivo (padrao: 2.0)\n"
         "  -C, --c2 <f>              Coeficiente social (padrao: 2.0)\n"
         "  -p, --pbest-init <s>      Inicio do pbest: position|random (padrao: position)\n"
@@ -62,7 +62,7 @@ void parse_args(int argc, char **argv) {
     int c;
     while ((c = getopt_long(argc, argv, "F:hIs:n:d:D:f:m:M:c:C:p:", long_options, NULL)) != -1) {
         switch (c) {
-            case 'F': config_path = optarg;                                                           break;
+            case 'F': config_path = optarg;                                                         break;
             case 's': apply_field("cli", "swarm_size",  optarg, &aux_cfg); set.swarm_size  = 1;     break;
             case 'D': apply_field("cli", "n_dims",      optarg, &aux_cfg); set.n_dims      = 1;     break;
             case 'n': apply_field("cli", "iterations",  optarg, &aux_cfg); set.iterations  = 1;     break;
@@ -73,7 +73,7 @@ void parse_args(int argc, char **argv) {
             case 'c': apply_field("cli", "c1",          optarg, &aux_cfg); set.c1          = 1;     break;
             case 'C': apply_field("cli", "c2",          optarg, &aux_cfg); set.c2          = 1;     break;
             case 'p': apply_field("cli", "pbest_init",  optarg, &aux_cfg); set.pbest_init  = 1;     break;
-            case 'I': g_cfg.interactive = 1;                                                          break;
+            case 'I': g_cfg.interactive = 1;                                                        break;
             case 'h': print_help(); exit(EXIT_SUCCESS);
             default:  die("opcao invalida");
         }

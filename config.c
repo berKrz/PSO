@@ -42,9 +42,10 @@ static void set_direction(const char *source, const char *key, const char *val, 
 static void set_fitness(const char *source, const char *key, const char *val, Config *dst) {
     static const struct {
         const char *name;
-        double (*fn)(double *, int);
+        double (*fn)(double *);
     } table[] = {
-        { "sphere", fitness_sphere },
+        { "sphere",         fitness_sphere },
+        { "rosenbrock", fitness_rosenbrock },
         { NULL,     NULL           }
     };
     for (int i = 0; table[i].name; i++) {

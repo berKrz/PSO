@@ -1,4 +1,5 @@
 #include "pso.h"
+#include "utils.h"
 #include <stdlib.h>
 
 Config g_cfg;
@@ -20,10 +21,21 @@ Config config_default(void) {
     };
 }
 
-double fitness_sphere(double *pos, int n_dims) {
+double fitness_sphere(double *pos) {
     double sum = 0.0;
-    for (int i = 0; i < n_dims; i++)
+    for (int i = 0; i < g_cfg.n_dims; i++)
         sum += pos[i] * pos[i];
+    return sum;
+}
+
+double fitness_rosenbrock(double *pos) {
+    if (g_cfg.n_dims < 2) die("Para Rosenbrock, n_dims precisa ser maior que 1");
+    double sum = 0.0;
+    for (int i = 0; i < g_cfg.n_dims-1; i++) {
+        double t1 = pos[i+1] - pos[i] * pos[i];
+        double t2 = 1 - pos[i];
+        sum += 100.0 * t1 * t1 + t2 * t2;
+    }
     return sum;
 }
 
@@ -55,7 +67,7 @@ void init_swarm(Particle *swarm, GBest *gbest) {
             swarm[i].vel[d] = 0.0;
         }
 
-        swarm[i].fitness = g_cfg.fitness_fn(swarm[i].pos, g_cfg.n_dims);
+        swarm[i].fitness = g_cfg.fitness_fn(swarm[i].pos);
 
         if (g_cfg.pbest_init == PBEST_POSITION) {
             copy_pos(swarm[i].pbest, swarm[i].pos);
@@ -63,7 +75,7 @@ void init_swarm(Particle *swarm, GBest *gbest) {
         } else {
             for (int d = 0; d < g_cfg.n_dims; d++)
                 swarm[i].pbest[d] = rand_double(g_cfg.domain_min, g_cfg.domain_max);
-            swarm[i].pbest_fitness = g_cfg.fitness_fn(swarm[i].pbest, g_cfg.n_dims);
+            swarm[i].pbest_fitness = g_cfg.fitness_fn(swarm[i].pbest);
         }
 
         if (is_better(swarm[i].pbest_fitness, gbest->fitness)) {
@@ -96,7 +108,7 @@ void update_swarm(Particle *swarm, GBest *gbest) {
             }
         }
 
-        swarm[i].fitness = g_cfg.fitness_fn(swarm[i].pos, g_cfg.n_dims);
+        swarm[i].fitness = g_cfg.fitness_fn(swarm[i].pos);
 
         if (is_better(swarm[i].fitness, swarm[i].pbest_fitness)) {
             swarm[i].pbest_fitness = swarm[i].fitness;
