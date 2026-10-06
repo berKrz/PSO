@@ -4,33 +4,33 @@ typedef enum { MINIMIZE, MAXIMIZE } OptDirection;
 typedef enum { PBEST_POSITION, PBEST_RANDOM } PbestInit;
 
 typedef struct {
-    double *pos;
-    double *vel;
-    double *pbest;
-    double  pbest_fitness;
-    double  fitness;
-    int     pbest_updated;
+  double *pos;
+  double *vel;
+  double *pbest;
+  double  pbest_fitness;
+  double  fitness;
+  int     pbest_updated;
 } Particle;
 
 typedef struct {
-    double *pos;
-    double  fitness;
+  double *pos;
+  double  fitness;
 } GBest;
 
 typedef struct {
-    int          swarm_size;
-    int          n_dims;
-    int          iterations;
-    double       w;
-    double       c1;
-    double       c2;
-    double       domain_min;
-    double       domain_max;
-    OptDirection direction;
-    PbestInit    pbest_init;
-    int          interactive;
+  int          swarm_size;
+  int          n_dims;
+  int          iterations;
+  double       w;
+  double       c1;
+  double       c2;
+  double       domain_min;
+  double       domain_max;
+  OptDirection direction;
+  PbestInit    pbest_init;
+  int          interactive;
 
-    double (*fitness_fn)(double *pos);
+  double (*fitness_fn)(double *pos);
 } Config;
 
 extern Config g_cfg;

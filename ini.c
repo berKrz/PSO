@@ -8,53 +8,53 @@
 #include <errno.h>
 
 static char *trim(char *s) {
-    while (isspace((unsigned char)*s)) s++;
-    if (*s == '\0') return s;
-    char *end = s + strlen(s) - 1;
-    while (end > s && isspace((unsigned char)*end)) end--;
-    *(end + 1) = '\0';
-    return s;
+  while (isspace((unsigned char)*s)) s++;
+  if (*s == '\0') return s;
+  char *end = s + strlen(s) - 1;
+  while (end > s && isspace((unsigned char)*end)) end--;
+  *(end + 1) = '\0';
+  return s;
 }
 
 void parse_ini(const char *filename, Config *dst) {
-    FILE *f = fopen(filename, "r");
-    if (!f) {
-        char msg[256];
-        snprintf(msg, sizeof(msg),
-                 "nao foi possivel abrir o arquivo de configuracao '%s': %s",
-                 filename, strerror(errno));
-        die(msg);
+  FILE *f = fopen(filename, "r");
+  if (!f) {
+    char msg[256];
+    snprintf(msg, sizeof(msg),
+              "nao foi possivel abrir o arquivo de configuracao '%s': %s",
+              filename, strerror(errno));
+    die(msg);
+  }
+
+  char line[256];
+  int  linenum = 0;
+
+  while (fgets(line, sizeof(line), f)) {
+    linenum++;
+    char *s = trim(line);
+
+    if (*s == '\0' || *s == '#') continue;
+
+    char *eq = strchr(s, '=');
+    if (!eq) {
+      char source[128];
+      snprintf(source, sizeof(source), "%s:%d", filename, linenum);
+      die_at(source, NULL, "formato esperado: 'chave = valor'");
     }
 
-    char line[256];
-    int  linenum = 0;
+    *eq        = '\0';
+    char *key   = trim(s);
+    char *value = trim(eq + 1);
 
-    while (fgets(line, sizeof(line), f)) {
-        linenum++;
-        char *s = trim(line);
+    char source[128];
+    snprintf(source, sizeof(source), "%s:%d", filename, linenum);
 
-        if (*s == '\0' || *s == '#') continue;
+    /* accept both 'key-name' and 'key_name' forms */
+    for (char *p = key; *p; p++)
+      if (*p == '-') *p = '_';
 
-        char *eq = strchr(s, '=');
-        if (!eq) {
-            char source[128];
-            snprintf(source, sizeof(source), "%s:%d", filename, linenum);
-            die_at(source, NULL, "formato esperado: 'chave = valor'");
-        }
+    apply_field(source, key, value, dst);
+  }
 
-        *eq        = '\0';
-        char *key   = trim(s);
-        char *value = trim(eq + 1);
-
-        char source[128];
-        snprintf(source, sizeof(source), "%s:%d", filename, linenum);
-
-        /* accept both 'key-name' and 'key_name' forms */
-        for (char *p = key; *p; p++)
-            if (*p == '-') *p = '_';
-
-        apply_field(source, key, value, dst);
-    }
-
-    fclose(f);
+  fclose(f);
 }
