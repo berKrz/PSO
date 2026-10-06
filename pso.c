@@ -1,6 +1,7 @@
 #include "pso.h"
 #include "utils.h"
 #include <stdlib.h>
+#include <math.h>
 
 Config g_cfg;
 
@@ -36,6 +37,19 @@ double fitness_rosenbrock(double *pos) {
     double t2 = 1 - pos[i];
     sum += 100.0 * t1 * t1 + t2 * t2;
   }
+  return sum;
+}
+
+double fitness_rastrigin(double *pos) {
+  if (g_cfg.domain_min < -5.12 || g_cfg.domain_max > 5.12)
+    die("Para Rastrigin, cada dimensao deve estar no dominio [-5.12, 5.12]");
+
+  double a = 10.0, sum = a * g_cfg.n_dims;
+
+  for (int i = 0; i < g_cfg.n_dims; i++) {
+    sum += pos[i] * pos[i] - a * cos(2.0 * M_PI * pos[i]);
+  }
+
   return sum;
 }
 
