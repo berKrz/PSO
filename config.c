@@ -44,9 +44,14 @@ static void set_fitness(const char *source, const char *key, const char *val, Co
     const char *name;
     double (*fn)(double *);
   } table[] = {
-    { "sphere",     fitness_sphere },
-    { "rosenbrock", fitness_rosenbrock },
-    { "rastrigin",  fitness_rastrigin },
+    { "sphere",      fitness_sphere },
+    { "rosenbrock",  fitness_rosenbrock },
+    { "rastrigin",   fitness_rastrigin },
+    { "griewank",    fitness_griewank },
+    { "ackley",      fitness_ackley },
+    { "eggholder",   fitness_eggholder },
+    { "schwefel",    fitness_schwefel },
+    { "schaffer_f6", fitness_schaffer_f6 },
     { NULL,     NULL           }
   };
   for (int i = 0; table[i].name; i++) {

@@ -35,10 +35,15 @@ typedef struct {
 
 extern Config g_cfg;
 
-Config config_default     (void);
-double fitness_sphere     (double *pos);
-double fitness_rosenbrock (double *pos);
-double fitness_rastrigin  (double *pos);
+Config config_default      (void);
+double fitness_sphere      (double *pos);
+double fitness_rosenbrock  (double *pos);
+double fitness_rastrigin   (double *pos);
+double fitness_griewank    (double *pos);
+double fitness_ackley      (double *pos);
+double fitness_eggholder   (double *pos);
+double fitness_schwefel    (double *pos);
+double fitness_schaffer_f6 (double *pos);
 void   init_swarm         (Particle *swarm, GBest *gbest);
 void   update_swarm       (Particle *swarm, GBest *gbest);
 void   free_swarm         (Particle *swarm);

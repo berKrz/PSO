@@ -53,6 +53,75 @@ double fitness_rastrigin(double *pos) {
   return sum;
 }
 
+double fitness_griewank(double *pos) {
+  if (g_cfg.domain_min < -600.0 || g_cfg.domain_max > 600.0)
+    die("Para Griewank, cada dimensao deve estar no dominio [-600, 600]");
+
+  double sum = 0.0, product = 1.0;
+
+  for (int i = 0; i < g_cfg.n_dims; i++) {
+    sum += (pos[i] * pos[i]);
+    product *= cos(pos[i] / sqrt((double)(i + 1)));
+  }
+
+  return 1.0 + sum / 4000.0 - product;
+}
+
+double fitness_ackley(double *pos) {
+  if (g_cfg.domain_min < -5.0 || g_cfg.domain_max > 5.0)
+    die("Para Ackley, cada dimensao deve estar no dominio [-5.0, 5.0]");
+
+  const double a = 20.0, b = 0.2, c = 2.0 * M_PI;
+
+  double sum_sq = 0.0, sum_cos = 0.0;
+
+  for (int i = 0; i < g_cfg.n_dims; i++) {
+    sum_sq += pos[i] * pos[i];
+    sum_cos += cos(c * pos[i]);
+  }
+
+  return -a * exp(-b * sqrt(sum_sq / g_cfg.n_dims)) - exp(sum_cos / g_cfg.n_dims) + a + exp(1.0);
+}
+
+double fitness_eggholder(double *pos) {
+  if (g_cfg.n_dims != 2)
+    die("Para Eggholder, n_dims precisa ser igual a 2");
+
+  if (g_cfg.domain_min < -512.0 || g_cfg.domain_max > 512.0)
+    die("Para Eggholder, cada dimensao deve estar no dominio [-512, 512]");
+
+  double x = pos[0], y = pos[1];
+
+  return -(y + 47.0) * sin(sqrt(fabs(x / 2.0 + (y + 47.0))))
+         - x * sin(sqrt(fabs(x - (y + 47.0))));
+}
+
+double fitness_schwefel(double *pos) {
+  if (g_cfg.domain_min < -500.0 || g_cfg.domain_max > 500.0)
+    die("Para Schwefel, cada dimensao deve estar no dominio [-500, 500]");
+
+  const double a = 418.9828872724338;
+  double sum = 0.0;
+
+  for (int i = 0; i < g_cfg.n_dims; i++) {
+    sum += -pos[i] * sin(sqrt(fabs(pos[i])));
+  }
+
+  return a * g_cfg.n_dims + sum;
+}
+
+double fitness_schaffer_f6(double *pos) {
+  if (g_cfg.n_dims != 2)
+    die("Para Schaffer's F6, n_dims precisa ser igual a 2");
+
+  if (g_cfg.domain_min < -100.0 || g_cfg.domain_max > 100.0)
+    die("Para Schaffer's F6, cada dimensao deve estar no dominio [-100, 100]");
+
+  double x = pos[0], y = pos[1], r1 = x * x + y * y, r2 = 1.0 + 0.001 * r1;
+
+  return 0.5 + (sin(sqrt(r1)) * sin(sqrt(r1)) - 0.5) / (r2 * r2);
+}
+
 static int is_better(double a, double b) {
   return g_cfg.direction == MINIMIZE ? a < b : a > b;
 }
